@@ -1,3 +1,4 @@
 settings.json
 queue.json
 driver.sh
+*.log
