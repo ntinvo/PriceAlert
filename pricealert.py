@@ -37,7 +37,7 @@ def main():
     for item in fmf_new_queue:
         if item.fullname not in feed_map:
             new_data = True
-            feed_map[item.fullname] = [item.title, item.url, item.permalink, item.short_link]
+            feed_map[item.fullname] = [item.title, item.url, item.permalink, item.created_utc, item.short_link]
             to_notify.append(item.fullname)
 
     if new_data:
@@ -54,10 +54,10 @@ def main():
                     message_body = message_body + "\nURL: {}\nReddit: {}\n".format(metadata[1], metadata[-1])
                 message = twilio_client.messages.create(body=message_body,
                                                         to=settings_map["personal_number"],
-                                                        from_= settings_map["service_number"])
-                print(message.sid)
+                                                        from_=settings_map["service_number"])
+                print(message.sid + " At time: " + str(metadata[3]))
         except twilio.TwilioRestException as e:
-            print e
+            print(e)
 
 
     with open(INFO, "w") as data_dumper:
