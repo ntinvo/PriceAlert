@@ -46,12 +46,14 @@ def main():
             auth_token = settings_map["auth_token"]
             twilio_client = TwilioRestClient(account_sid, auth_token)
             for post in to_notify:
-                metadata = feed_map[post]
-                message_body = "\nFMF: {}\n".format(metadata[0].encode('ascii', 'ignore'))
+                message_body = ""
                 if metadata[1] == metadata[2]:
-                    message_body = message_body + "\nReddit (self): {}\n".format(metadata[-1])
+                    message_body = "\nReddit (self): {}\n".format(metadata[-1])
                 else:
-                    message_body = message_body + "\nURL: {}\nReddit: {}\n".format(metadata[1], metadata[-1])
+                    message_body = "\nURL: {}\nReddit: {}\n".format(metadata[1], metadata[-1])
+                metadata = feed_map[post]
+                message_body = message_body + "\nFMF: {}\n".format(metadata[0].encode('ascii', 'ignore'))
+
                 message = twilio_client.messages.create(body=message_body,
                                                         to=settings_map["personal_number"],
                                                         from_=settings_map["service_number"])
